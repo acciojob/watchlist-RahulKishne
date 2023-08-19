@@ -26,8 +26,11 @@ public class MovieRepository {
     }
 
     public String addMovieDirectorPair(String movieName, String directorName) {
-        db3.put(directorName,movieName);
-        return "Successfully Added MovieDirectorPair";
+        if(db1.containsKey(movieName) && db2.containsKey(directorName)){
+            db3.put(directorName,movieName);
+            return "Successfully Added MovieDirectorPair";
+        }
+        return "";
     }
 
     public Movie getMovieByName(String movieName) {
