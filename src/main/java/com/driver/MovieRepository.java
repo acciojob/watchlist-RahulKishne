@@ -27,7 +27,7 @@ public class MovieRepository {
 
     public String addMovieDirectorPair(String movieName, String directorName) {
         if(db1.containsKey(movieName) && db2.containsKey(directorName)){
-            db3.put(directorName,movieName);
+            db3.put(movieName,directorName);
             return "Successfully Added MovieDirectorPair";
         }
         return "";
@@ -43,8 +43,12 @@ public class MovieRepository {
 
     public List<String> getMoviesByDirectorName(String directorName) {
         List<String> list=new ArrayList<>();
-        if(db3.containsKey(directorName)){
-            list.add(db3.get(directorName));
+        for (Map.Entry<String, String> entry : db3.entrySet()) {
+            String mname=entry.getKey();
+            String dname=entry.getValue();
+            if(dname.equals(directorName)){
+                list.add(mname);
+            }
         }
         return list;
     }
@@ -58,12 +62,14 @@ public class MovieRepository {
     }
 
     public String deleteDirectorByName(String directorName) {
-        if(db3.containsKey(directorName)){
-            String mname=db3.get(directorName);
-            db3.remove(directorName);
-            db2.remove(directorName);
-            db1.remove(mname);
-            return "Successfully deleted movie and director";
+        for (Map.Entry<String, String> entry : db3.entrySet()) {
+            String key = entry.getKey();
+            if(db3.containsValue(directorName)){
+                db3.remove(key,directorName);
+                db1.remove(key);
+                db2.remove(directorName);
+                return "Successfully deleted movie and director";
+            }
         }
         return "";
     }
@@ -72,11 +78,11 @@ public class MovieRepository {
         for (Map.Entry<String, String> entry : db3.entrySet()) {
             String key = entry.getKey();
             String value=entry.getValue();
-            if(db1.containsKey(value)){
-                db1.remove(value);
+            if(db1.containsKey(key)){
+                db1.remove(key);
             }
-            if(db2.containsKey(key)){
-                db2.remove(key);
+            if(db2.containsValue(value)){
+                db2.remove(value);
             }
         }
         db3.clear();
