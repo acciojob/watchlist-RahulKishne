@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class MovieService {
     @Autowired
-    MovieRepository movieRepository;
+    private MovieRepository movieRepository;
 
     public String addMovie(Movie movie) {
         return movieRepository.addMovie(movie);

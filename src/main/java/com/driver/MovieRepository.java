@@ -11,10 +11,10 @@ import java.util.Map;
 @Repository
 public class MovieRepository {
 
-    Map<String,Movie> db1=new HashMap<>();
-    Map<String,Director> db2=new HashMap<>();
+    private Map<String,Movie> db1=new HashMap<>();
+    private Map<String,Director> db2=new HashMap<>();
 
-    Map<String,String> db3=new HashMap<>();
+    private Map<String,String> db3=new HashMap<>();
     public String addMovie(Movie movie) {
         db1.put(movie.getName(),movie);
         return "You Have successfully Added your movie...";
@@ -43,10 +43,10 @@ public class MovieRepository {
 
     public List<String> getMoviesByDirectorName(String directorName) {
         List<String> list=new ArrayList<>();
-        list.add(db3.get(directorName));
+        if(db3.containsKey(directorName)){
+            list.add(db3.get(directorName));
+        }
         return list;
-
-
     }
     public List<String> findAllMovies() {
         List<String> ans=new ArrayList<>();
@@ -58,11 +58,27 @@ public class MovieRepository {
     }
 
     public String deleteDirectorByName(String directorName) {
-        db3.remove(directorName);
-        return "Successfully deleted movie and director";
+        if(db3.containsKey(directorName)){
+            String mname=db3.get(directorName);
+            db3.remove(directorName);
+            db2.remove(directorName);
+            db1.remove(mname);
+            return "Successfully deleted movie and director";
+        }
+        return "";
     }
 
     public String deleteAllDirectors() {
+        for (Map.Entry<String, String> entry : db3.entrySet()) {
+            String key = entry.getKey();
+            String value=entry.getValue();
+            if(db1.containsKey(value)){
+                db1.remove(value);
+            }
+            if(db2.containsKey(key)){
+                db2.remove(key);
+            }
+        }
         db3.clear();
         return "Successfully deleted all movies which made by directors";
     }
