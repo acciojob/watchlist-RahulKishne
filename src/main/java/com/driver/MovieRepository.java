@@ -64,10 +64,11 @@ public class MovieRepository {
     public String deleteDirectorByName(String directorName) {
         for (Map.Entry<String, String> entry : db3.entrySet()) {
             String key = entry.getKey();
-            if(db3.containsValue(directorName)){
-                db3.remove(key,directorName);
+            String dname=entry.getValue();
+            if(dname.equals(directorName)){
+                db3.remove(key,dname);
                 db1.remove(key);
-                db2.remove(directorName);
+                db2.remove(dname);
                 return "Successfully deleted movie and director";
             }
         }
